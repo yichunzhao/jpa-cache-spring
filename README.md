@@ -3,7 +3,7 @@ Setup the 2nd level JPA cache with Springboot
 
 
 
-* Good practices for Many-to-Many with JPA-Hibernate
+### Good practices for Many-to-Many with JPA-Hibernate
 
 * Model associations as a Set
 
