@@ -22,7 +22,6 @@ class AuthorRepositoryTest {
     @Autowired
     private AuthorRepository authorRepository;
 
-
     @Test
     void testFindAuthorBooksByAuthorId() {
         Author author = authorRepository.findAuthorBooks(1);
@@ -50,6 +49,12 @@ class AuthorRepositoryTest {
     void whenFindAuthorBookWhoIsNotExisted_ReturnNull() {
         Author author = authorRepository.findAuthorBooksByName("Kang", "Yang");
         assertThat(author, is(nullValue()));
+    }
+
+    @Test
+    void saveNonExistedAuthor(){
+        Author author = new Author();
+        authorRepository.save(author);
     }
 
 }

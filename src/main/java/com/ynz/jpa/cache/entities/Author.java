@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Data
 public class Author {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer authorId;
 
     @Column(nullable = false, length = 128, unique = true)
@@ -32,7 +33,6 @@ public class Author {
 
     public void addBook(Book book) {
         books.add(book);
-        book.addAuthor(this);
     }
-    
+
 }
