@@ -17,7 +17,7 @@ Setup the 2nd level JPA cache with Springboot
 
 ### Difference between Join and Join Fetch
 
-Join and Join Fetch looks like very similar, but the generated SQL is quite different; 
+Join and Join Fetch looks like very similar, but the generated SQL is quite different; Join-Fetch generates less SQL queries. 
 
 When using Join, It generates two SQL queries; It causes 3 table joins totally.   
 
@@ -54,3 +54,30 @@ Hibernate:
         books0_.author_id=?
 
 ````
+
+When using Join Fetch, it generates a single query by extending query selection fields.
+
+`@Query("Select a from Author a Join Fetch a.books b where a.authorId = :authorId")`
+
+````
+Hibernate: 
+    select
+        author0_.author_id as author_i1_0_0_,
+        book2_.book_id as book_id1_2_1_,
+        author0_.first_name as first_na2_0_0_,
+        author0_.last_name as last_nam3_0_0_,
+        book2_.title as title2_2_1_,
+        books1_.author_id as author_i2_1_0__,
+        books1_.book_id as book_id1_1_0__ 
+    from
+        authors author0_ 
+    inner join
+        book_author books1_ 
+            on author0_.author_id=books1_.author_id 
+    inner join
+        books book2_ 
+            on books1_.book_id=book2_.book_id 
+    where
+        author0_.author_id=?
+````
+
