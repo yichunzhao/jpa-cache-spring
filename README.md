@@ -2,6 +2,8 @@
 Setup the 2nd level JPA cache with Springboot
 
 
+### 2nd level Cache in JPA
+The purpose of 2nd level cache is to store the often-visited data in the memory staying with the business logic, and therefore reducing the frequency to visit the database via the nextwork. So, the 2nd level cache is applied only with the fetching operations, obviously it is the purpose as mentioned previously. Normally, we put the caching at the service layer, for we want the business logic directly access data there, rather than going further to visit the persistence layer. 
 
 ### Good practices for Many-to-Many with JPA-Hibernate
 
