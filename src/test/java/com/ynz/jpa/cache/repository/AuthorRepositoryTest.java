@@ -4,6 +4,7 @@ import com.ynz.jpa.cache.entities.Author;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -11,16 +12,18 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 @DataJpaTest
 class AuthorRepositoryTest {
 
     @Autowired
-    private BookRepository bookRepository;
+    private AuthorRepository authorRepository;
 
     @Autowired
-    private AuthorRepository authorRepository;
+    private TestEntityManager manager;
 
     @Test
     void testFindAuthorBooksByAuthorId() {
@@ -52,9 +55,21 @@ class AuthorRepositoryTest {
     }
 
     @Test
-    void saveNonExistedAuthor(){
+    void saveNonExistedAuthor() {
         Author author = new Author();
         authorRepository.save(author);
+    }
+
+    @Test
+    void testDeleteAuthorById() {
+        Author author = new Author();
+        author.setFirstName("Mike");
+        author.setLastName("Zhao");
+
+        Author persisted = manager.persistAndFlush(author);
+        assertNotNull(persisted);
+        authorRepository.deleteById(persisted.getAuthorId());
+        assertNull(manager.find(Author.class, persisted.getAuthorId()));
     }
 
 }

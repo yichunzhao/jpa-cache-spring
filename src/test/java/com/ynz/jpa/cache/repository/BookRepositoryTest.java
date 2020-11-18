@@ -4,6 +4,7 @@ import com.ynz.jpa.cache.entities.Book;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -12,12 +13,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 class BookRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private TestEntityManager manager;
 
     @Test
     void testFetchBookByBookId() {
@@ -41,5 +46,17 @@ class BookRepositoryTest {
                 () -> assertThat(book.getAuthors(), hasSize(1))
         );
     }
+
+    @Test
+    void testDeleteBookById() {
+        Book book = new Book();
+        book.setTitle("my book");
+
+        Book persisted = manager.persistAndFlush(book);
+        assertNotNull(persisted);
+        bookRepository.deleteById(persisted.getBookId());
+        assertNull(manager.find(Book.class, persisted.getBookId()));
+    }
+
 
 }
