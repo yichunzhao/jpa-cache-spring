@@ -1,13 +1,13 @@
-insert into author ( author_id, first_name, last_name) values(1,'William', 'Shakespeare');
-insert into author (author_id, first_name, last_name) values(2,'Agatha', 'Christie');
+insert into authors (author_id, first_name, last_name) values(1,'William', 'Shakespeare');
+insert into authors (author_id, first_name, last_name) values(2,'Agatha', 'Christie');
 
-insert into book(book_id, title) values(1, 'The Tragical History of Hamlet');
-insert into book(book_id, title) values(2, 'The Tempest');
-insert into book(book_id, title) values(3, 'The Taming of the Shrew');
+insert into books(book_id, title) values(1, 'The Tragical History of Hamlet');
+insert into books(book_id, title) values(2, 'The Tempest');
+insert into books(book_id, title) values(3, 'The Taming of the Shrew');
 
-insert into book(book_id, title) values(4, 'The Mysterious Affair at Styles');
-insert into book(book_id, title) values(5, 'Murder on the Orient Express');
-insert into book(book_id, title) values(6, 'The Murder of Roger Ackroyd');
+insert into books(book_id, title) values(4, 'The Mysterious Affair at Styles');
+insert into books(book_id, title) values(5, 'Murder on the Orient Express');
+insert into books(book_id, title) values(6, 'The Murder of Roger Ackroyd');
 
 insert into book_author(book_id,author_id) values(1,1);
 insert into book_author(book_id,author_id) values(2,1);
