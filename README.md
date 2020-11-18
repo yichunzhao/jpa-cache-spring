@@ -19,7 +19,7 @@ Setup the 2nd level JPA cache with Springboot
 
 Join and Join Fetch looks like very similar, but the generated SQL is quite different; 
 
-When using Join, It generates two SQL queries; It causes 5 table joins totally.   
+When using Join, It generates two SQL queries; It causes 3 table joins totally.   
 
 `@Query("Select a from Author a Join a.books b where a.authorId = :authorId")`
 
