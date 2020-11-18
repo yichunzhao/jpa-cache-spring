@@ -83,3 +83,7 @@ Hibernate:
         author0_.author_id=?
 ````
 
+### StackOver flow exception as using Lombok in bi-relationship
+
+Watching out stackover flow exception as using lombok to create hashcode in a bi-directional relationship; it causes a recursive invoking, and eventually leading to a stack overflow. In the entities, the relationship achors doesn't stand for model physical meanings, they may be excluded. 
+
