@@ -11,10 +11,6 @@ Setup the 2nd level JPA cache with Springboot
 
 * Always use FetchType.Lazy: 
 
-*  query-specific fetching
-
-using joint-fetch; named entity graph; 
-joint-fetch cross(JOIN FETCH) is almost identical to a simple join clause in a JPQL query. Altough they look similar but Joint-fectch has much impact on the generated SQL query. 
-
+*  query-specific fetching: using joint-fetch; named entity graph;  joint-fetch cross(JOIN FETCH) is almost identical to a simple join clause in a JPQL query. Altough they look similar but Joint-fectch has much impact on the generated SQL query. 
 
 * Don't use CascadeTye Remove and ALL. It may remove the whole of database. 
