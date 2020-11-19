@@ -58,5 +58,15 @@ class BookRepositoryTest {
         assertNull(manager.find(Book.class, persisted.getBookId()));
     }
 
+    @Test
+    void testSaveNewBookWithoutAuthor(){
+        Book book = new Book();
+        book.setTitle("my book");
+
+        Book persisted = bookRepository.save(book);
+        assertNotNull(persisted);
+
+    }
+
 
 }

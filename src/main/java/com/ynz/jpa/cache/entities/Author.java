@@ -3,6 +3,8 @@ package com.ynz.jpa.cache.entities;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -18,7 +20,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "AUTHORS")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +34,6 @@ public class Author {
     @Column(nullable = false, length = 128)
     private String lastName;
 
-    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = Book.class)
     private Set<Book> books = new HashSet<>();
 
