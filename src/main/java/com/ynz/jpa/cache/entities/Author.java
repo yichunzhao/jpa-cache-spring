@@ -3,7 +3,6 @@ package com.ynz.jpa.cache.entities;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -34,9 +33,5 @@ public class Author {
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = Book.class)
     private Set<Book> books = new HashSet<>();
-
-    public void addBook(Book book) {
-        books.add(book);
-    }
 
 }

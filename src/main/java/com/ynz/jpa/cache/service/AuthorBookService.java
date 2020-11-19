@@ -30,7 +30,7 @@ public class AuthorBookService {
 
     public void deleteAuthor(Author author) {
         Author found = findAuthorByName(author.getFirstName(), author.getLastName());
-        if (found != null) throw new NotFoundException("Author is not existed!");
+        if (found == null) throw new NotFoundException("Author is not existed!");
         authorRepository.delete(author);
     }
 

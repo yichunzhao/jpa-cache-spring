@@ -54,11 +54,11 @@ class AuthorRepositoryTest {
         assertThat(author, is(nullValue()));
     }
 
-    @Test
-    void saveNonExistedAuthor() {
-        Author author = new Author();
-        authorRepository.save(author);
-    }
+//    @Test
+//    void saveNonExistedAuthor() {
+//        Author author = new Author();
+//        authorRepository.save(author);
+//    }
 
     @Test
     void testDeleteAuthorById() {
