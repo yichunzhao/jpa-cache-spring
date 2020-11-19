@@ -7,9 +7,9 @@ The purpose of 2nd level cache is to store the often-visited data in the memory 
 
 ### Good practices for Many-to-Many with JPA-Hibernate
 
-* Model associations as a Set; don't use List as modeling many-to-many. when Hibernate handling List on the many-to-many case, it first remove all records from the associated table; before inserting the remaining ones. 
+* Model associations as a Set; don't use List as modeling many-to-many. On Hibernate removing an element from a List ref. to a many-to-many case, it first remove all records from the associated table, then inserting the remaining ones. It costs much than the spending as using a Set. 
 
-* Bi-lateral association and provide utility methods
+* Bi-lateral association and provide utility methods; a bi-lateral relationship facilitates table joins; utility methods at the both end, may help to build bi-directional association by one kick.
 
 * Always use FetchType.Lazy: 
 
