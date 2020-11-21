@@ -9,11 +9,11 @@ The purpose of 2nd level cache is to store the often-visited data in the memory 
 
 * Model associations as a Set; don't use List as modeling many-to-many. On Hibernate removing an element from a List ref. to a many-to-many case, it first remove all records from the associated table, then inserting the remaining ones. It costs much than the spending as using a Set. 
 
-* Bi-lateral association and provide utility methods; a bi-lateral relationship facilitates table joins; utility methods at the both end, may help to build bi-directional association by one kick.
+* Bi-lateral association and provide utility methods; a bi-lateral relationship facilitates table joins; utility methods at the both end, may help to build bi-directional association by invoking one method, so as to reducing errors.
 
-* Always use FetchType.Lazy: 
+* Always use FetchType.Lazy: always using lazy fetching to reduce N+1 problem. Instead, using join queries.  
 
-*  query-specific fetching: using joint-fetch; named entity graph;  joint-fetch cross(JOIN FETCH) is almost identical to a simple join clause in a JPQL query. Altough they look similar but Joint-fectch has much impact on the generated SQL query. 
+*  Query-specific fetching: using joint-fetch; named entity graph;  joint-fetch cross(JOIN FETCH) is almost identical to a simple join clause in a JPQL query. Altough they look similar but Joint-fectch has much impact on the generated SQL query. 
 
 * Don't use CascadeTye Remove and ALL. It may remove the whole of database. 
 
@@ -83,7 +83,35 @@ Hibernate:
         author0_.author_id=?
 ````
 
-### StackOver flow exception as using Lombok in bi-relationship
+### Issues as using Lombok with Entities
 
-Watching out stackover flow exception as using lombok to create hashcode in a bi-directional relationship; it causes a recursive invoking, and eventually leading to a stack overflow. In the entities, the relationship achors doesn't stand for model physical meanings, they may be excluded. 
+It was not a good experience as using Lombok with Entities, but it is totally fine with DTO. Don't use @Data, @EqualsAndHashCode and @ToString
 
+#### StackOver flow as using lombok in bi-relationship
+Watching out stackover flow exception as using lombok to create hashcode in a bi-directional relationship; it causes a recursive invoking, and eventually leading to a stack overflow. In the entities, the relationship achors doesn't stand for model physical meanings, they should be excluded. 
+
+#### HashCode
+Primary key is auto-generated as persisting in the database, otherwise it is a null. Hence, caclulating hascode with the primary key doesn't return a fixed value as using the Lombok. 
+
+#### ToString
+Lombok toString method may include lazy loaded fields, within a open persistence session it may cause extra queries and leaving database overhead.  
+
+### Writting Entity HashCode and Equals
+
+JPA entities maintain several states during their life cycles. Primary key is obtained only when the entity is persisted; so the same object may in different states having different primary key value. this produces different hashCode value, however this doesn't fit the Java doc requirement on the hashCode method. 
+
+JavaDoc requirements on the hashCode method: 
+
+> whenever hashcode method is invoked on the same object more than once during an execution of a java application, the hashCode method must consistently return the same integer, > if no information used in equals comparisions on the object is modified. However, this integer need not remain consistent from one execution of an application to another execution of the same application. 
+
+> if two objects are equal according to the their equals methods, then calling the hashCode method on each of the two objects must produce the same integer result.
+
+> if two object are not equal according to the equals method, it is not required to produce distinct integer as invoking hashCode method; However, if it produces distinct hashCodes, it may improve hashtable performance. (ref. to hashtable or hashmap internal implementation)
+
+principles:  
+
+> if you tell the JPA to generate the primary key, then you need to return a fixed value from the hashCode method. Certainly, this will reduce hashtable performance, for all the > values go to the same buket. On this case, the equals method determines if two objects are duplicated objects. Special handling of null in Equals();  
+
+> if programmatically set primary key;  use them in equals() and hashCode()
+
+> if you use naturalId or business key; use them in equals()  and hashCode()
