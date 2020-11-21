@@ -115,3 +115,14 @@ principles:
 > if programmatically set primary key;  use them in equals() and hashCode()
 
 > if you use naturalId or business key; use them in equals()  and hashCode()
+
+### Bean-Validation within JPA
+
+Since Springboot 2.3, bean-validation framework become an independent starter. 
+
+````
+<dependency> 
+    <groupId>org.springframework.boot</groupId> 
+    <artifactId>spring-boot-starter-validation</artifactId> 
+</dependency>
+````
