@@ -9,6 +9,8 @@ import com.ynz.jpa.cache.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AuthorBookService {
@@ -39,27 +41,19 @@ public class AuthorBookService {
         return found;
     }
 
-    public Book findBookByTitle(String title) {
-        Book found = bookRepository.findBookAuthor(title);
-        if (found == null) throw new NotFoundException("book is found");
+    public List<Book> findBookAuthorByTitle(String title) {
+        List<Book> found = bookRepository.findBookAuthor(title);
+        if (found.isEmpty()) throw new NotFoundException("book is not found");
         return found;
     }
 
-    public Book createBook(Book book) {
-        try {
-            return findBookByTitle(book.getTitle());
-        } catch (NotFoundException e) {
-            return bookRepository.save(book);
-        }
-    }
-
     public Book updateBook(Book updatedBook) {
-        findBookByTitle(updatedBook.getTitle());
+        findBookAuthorByTitle(updatedBook.getTitle());
         return bookRepository.save(updatedBook);
     }
 
-    public void deleteBook(Book book){
-        findBookByTitle(book.getTitle());
+    public void deleteBook(Book book) {
+        findBookAuthorByTitle(book.getTitle());
         bookRepository.deleteById(book.getBookId());
     }
 

@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,11 +49,11 @@ class BookRepositoryTest {
     @Test
     void givenBookTitle_FindBookAndItsAuthors() {
         String bookName = "The Tragical History of Hamlet";
-        Book found = bookRepository.findBookAuthor(bookName);
+        List<Book> found = bookRepository.findBookAuthor(bookName);
 
         assertAll("find found and its author: ",
-                () -> assertNotNull(found),
-                () -> assertThat(found.getAuthors(), hasSize(1))
+                () -> assertThat(found, hasSize(1)),
+                () -> assertThat(found.get(0).getAuthors(), hasSize(1))
         );
     }
 
