@@ -6,17 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import javax.validation.ConstraintViolationException;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @DataJpaTest
+public
 class AuthorRepositoryTest {
 
     @Autowired
@@ -54,11 +59,30 @@ class AuthorRepositoryTest {
         assertThat(author, is(nullValue()));
     }
 
-//    @Test
-//    void saveNonExistedAuthor() {
-//        Author author = new Author();
-//        authorRepository.save(author);
-//    }
+    @Test
+    void whenSaveNonExistedAuthorWithoutName_JpaThrowValidationException() {
+        Author author = new Author();
+        assertThrows(ConstraintViolationException.class, () -> authorRepository.save(author));
+    }
+
+    @Test
+    void afterTransientAuthorIsPersisted_HashCodeIsSameEqualsIsTrue() {
+        Author author = new Author();
+        assertNull(author.getAuthorId());
+        Integer transientHashCode = author.hashCode();
+
+        author.setFirstName("Mike");
+        author.setLastName("Zhao");
+
+        Author saved = authorRepository.save(author);
+
+        assertAll(
+                () -> assertNotNull(saved),
+                () -> assertNotNull(saved.getAuthorId()),
+                () -> assertEquals(transientHashCode, saved.hashCode()),
+                () -> assertEquals(author, saved)//now pointing to the same DB entry.
+        );
+    }
 
     @Test
     void testDeleteAuthorById() {
