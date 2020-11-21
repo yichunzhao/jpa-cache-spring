@@ -1,12 +1,5 @@
 package com.ynz.jpa.cache.entities;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,13 +13,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "AUTHORS")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
     private Integer authorId;
 
     @Column(nullable = false, length = 128, unique = true)
@@ -37,4 +26,52 @@ public class Author {
     @ManyToMany(mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = Book.class)
     private Set<Book> books = new HashSet<>();
 
+    protected boolean canEqual(final Object other) {
+        return other instanceof Author;
+    }
+
+    public Author() {
+    }
+
+    public Integer getAuthorId() {
+        return authorId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == null) return false;
+        if (this == o) return true;
+        if (!(o instanceof Author)) return false;
+        Author author = (Author) o;
+        return this.authorId != null && this.authorId.equals(author.getAuthorId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 47;
+    }
 }

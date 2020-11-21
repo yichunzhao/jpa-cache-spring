@@ -1,12 +1,5 @@
 package com.ynz.jpa.cache.entities;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,13 +15,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "BOOKS")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
     private Integer bookId;
 
     @Column(nullable = false, unique = true)
@@ -42,6 +31,9 @@ public class Book {
     )
     private Set<Author> authors = new HashSet<>();
 
+    public Book() {
+    }
+
     public void addAuthor(Author author) {
         authors.add(author);
         author.getBooks().add(this);
@@ -52,4 +44,38 @@ public class Book {
         author.getBooks().remove(this);
     }
 
+    public Integer getBookId() {
+        return bookId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (this == o) return true;
+        if (!(o instanceof Book)) return false;
+
+        Book book = (Book) o;
+        return this.bookId != null && this.bookId.equals(book.getBookId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 43;
+    }
 }
