@@ -1,5 +1,6 @@
 package com.ynz.jpa.cache.entities;
 
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,8 +21,11 @@ public class Author {
     private Integer authorId;
 
     @Column(nullable = false, length = 128, unique = true)
+    @NotNull
     private String firstName;
+
     @Column(nullable = false, length = 128)
+    @NotNull
     private String lastName;
 
     @ManyToMany(mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = Book.class)
