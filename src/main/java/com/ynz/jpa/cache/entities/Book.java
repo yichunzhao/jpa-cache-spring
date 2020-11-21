@@ -21,7 +21,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bookId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotNull
     private String title;
 
