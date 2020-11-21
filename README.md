@@ -85,8 +85,15 @@ Hibernate:
 
 ### Issues as using Lombok with Entities
 
-In general, it was not a good impression as using Lombok with Entities, but it is totally fine with DTO. It causes many un-predictable errors. 
+It was not a good experience as using Lombok with Entities, but it is totally fine with DTO. Don't use @Data, @EqualsAndHashCode and @ToString
 
-StackOver flow as using lombok in bi-relationship
-Watching out stackover flow exception as using lombok to create hashcode in a bi-directional relationship; it causes a recursive invoking, and eventually leading to a stack overflow. In the entities, the relationship achors doesn't stand for model physical meanings, they may be excluded. 
+#### StackOver flow as using lombok in bi-relationship
+Watching out stackover flow exception as using lombok to create hashcode in a bi-directional relationship; it causes a recursive invoking, and eventually leading to a stack overflow. In the entities, the relationship achors doesn't stand for model physical meanings, they should be excluded. 
+
+#### HashCode
+Primary key is auto-generated as persisting in the database, otherwise it is a null. Hence, caclulating hascode with the primary key doesn't return a fixed value as using the Lombok. 
+
+#### ToString
+Lombok toString method may include lazy loaded fields, within a open persistence session it may cause extra queries and leaving database overhead.  
+
 
