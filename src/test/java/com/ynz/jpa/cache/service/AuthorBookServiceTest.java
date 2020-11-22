@@ -5,12 +5,14 @@ import com.ynz.jpa.cache.entities.Book;
 import com.ynz.jpa.cache.exception.DuplicatedElementException;
 import com.ynz.jpa.cache.exception.NotFoundException;
 import com.ynz.jpa.cache.repository.AuthorRepository;
+import com.ynz.jpa.cache.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -18,6 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -29,6 +32,9 @@ class AuthorBookServiceTest {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Test
     void testCreateAuthorBook() {
@@ -89,6 +95,35 @@ class AuthorBookServiceTest {
     }
 
     @Test
+    void givenBooksHasOneAuthor_DeleteAuthorBookIsAlsoRemoved() {
+        Author author = new Author();
+        author.setFirstName("Mike");
+        author.setLastName("Zhao");
+
+        Book book1 = new Book();
+        book1.setTitle("my book1");
+
+        Book book2 = new Book();
+        book2.setTitle("my book2");
+
+        //books having one author
+        author.addBook(book1);
+        author.addBook(book2);
+
+        Author saved = authorRepository.save(author);
+        assertNotNull(saved);
+
+        authorBookService.deleteAuthorById(saved.getAuthorId());
+
+        Optional<Author> found = authorRepository.findAuthorBooksById(saved.getAuthorId());
+        assertAll(
+                () -> assertFalse(found.isPresent()),
+                () -> saved.getBooks().stream().mapToInt(book -> book.getBookId())
+                        .forEach(id -> assertFalse(bookRepository.findById(id).isPresent()))
+        );
+    }
+
+    @Test
     void whenCreateAuthorExistedAlready_ThenItThrowsDuplicatedException() {
         Author author = new Author();
         author.setFirstName("William");
@@ -118,7 +153,4 @@ class AuthorBookServiceTest {
     }
 
 
-    @Test
-    void deleteBook() {
-    }
 }

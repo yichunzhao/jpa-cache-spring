@@ -7,11 +7,13 @@ import com.ynz.jpa.cache.repository.AuthorRepository;
 import com.ynz.jpa.cache.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthorBookService {
 
     private final AuthorRepository authorRepository;
@@ -40,15 +42,33 @@ public class AuthorBookService {
         return authorRepository.save(author);
     }
 
-    public void deleteAuthor(Author author) {
-        Author found = findAuthorByName(author.getFirstName(), author.getLastName());
-        if (found == null) throw new NotFoundException("Author is not existed!");
-        authorRepository.delete(author);
+    /**
+     * Delete an Author, but not associated books if having more than one author.
+     *
+     * @param authorId Integer target author id
+     */
+    public void deleteAuthorById(Integer authorId) {
+        Author found = findAuthorById(authorId);
+
+        authorRepository.deleteById(authorId);
+
+        //book has 1 author; remove it.
+        //book has >1 author; keep book, but remove this author.
+        for (Book book : found.getBooks()) {
+            if (book.getAuthors().size() > 1) book.removeAuthor(found);
+            if (book.getAuthors().size() == 1) bookRepository.deleteById(book.getBookId());
+        }
+
     }
 
     public Author findAuthorByName(String firstName, String lastName) {
         Author found = authorRepository.findAuthorBooksByName(firstName, lastName);
         return found;
+    }
+
+    public Author findAuthorById(Integer authorId) {
+        return authorRepository.findAuthorBooksById(authorId)
+                .orElseThrow(() -> new NotFoundException("Author is not existed!"));
     }
 
     public List<Book> findBookAuthorByTitle(String title) {

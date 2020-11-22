@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @DataJpaTest
@@ -33,16 +35,16 @@ class AuthorRepositoryTest {
 
     @Test
     void testFindAuthorBooksByAuthorId() {
-        Author author = authorRepository.findAuthorBooks(1);
+        Optional<Author> author = authorRepository.findAuthorBooksById(1);
         assertAll("find Author and Books",
-                () -> assertThat(author, is(notNullValue())),
-                () -> assertThat(author.getBooks(), hasSize(3))
+                () -> assertTrue(author.isPresent()),
+                () -> assertThat(author.get().getBooks(), hasSize(3))
         );
     }
 
     @Test
     void whenFindAuthorBooksByAuthorIdNotExisted_ReturnNull() {
-        assertThat(authorRepository.findAuthorBooks(10), is(nullValue()));
+        assertThat(authorRepository.findAuthorBooksById(10), is(nullValue()));
     }
 
     @Test
@@ -64,7 +66,7 @@ class AuthorRepositoryTest {
     }
 
     @Test
-    void findAuthorBook_WhenBookHavingMoreThanOneAuthor(){
+    void findAuthorBook_WhenBookHavingMoreThanOneAuthor() {
         List<Author> foundAuthors = authorRepository.findAuthorBooksByFullName("K.Sam", "Shanmugan");
         assertAll(
                 () -> assertThat(foundAuthors, hasSize(1)),

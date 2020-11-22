@@ -7,11 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AuthorRepository extends CrudRepository<Author, Integer> {
     @Query("Select a from Author a Join Fetch a.books b where a.authorId = :authorId")
-    Author findAuthorBooks(@Param("authorId") Integer authorId);
+    Optional<Author> findAuthorBooksById(@Param("authorId") Integer authorId);
 
     @Query("Select a from Author a Join Fetch a.books b where a.firstName = :firstName And a.lastName = :lastName")
     Author findAuthorBooksByName(@Param("firstName") String firstName, @Param("lastName") String lastName);
