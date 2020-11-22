@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import javax.validation.ConstraintViolationException;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -45,12 +46,36 @@ class AuthorRepositoryTest {
     }
 
     @Test
-    void testFindAuthorBookByName() {
+    void testFindAuthorBookByAuthorName() {
         Author author = authorRepository.findAuthorBooksByName("William", "Shakespeare");
         assertAll("find Author and Books",
                 () -> assertThat(author, is(notNullValue())),
                 () -> assertThat(author.getBooks(), hasSize(3))
         );
+    }
+
+    @Test
+    void whenFindAuthorBookByFullName_ItReturnsList() {
+        List<Author> foundAuthors = authorRepository.findAuthorBooksByFullName("William", "Shakespeare");
+        assertAll(
+                () -> assertThat(foundAuthors, hasSize(1)),
+                () -> assertThat(foundAuthors.get(0).getBooks(), hasSize(3))
+        );
+    }
+
+    @Test
+    void findAuthorBook_WhenBookHavingMoreThanOneAuthor(){
+        List<Author> foundAuthors = authorRepository.findAuthorBooksByFullName("K.Sam", "Shanmugan");
+        assertAll(
+                () -> assertThat(foundAuthors, hasSize(1)),
+                () -> assertThat(foundAuthors.get(0).getBooks(), hasSize(1))
+        );
+    }
+
+    @Test
+    void whenFindAuthorNotExisted_ItReturnsEmptyList() {
+        List<Author> foundAuthors = authorRepository.findAuthorBooksByFullName("Kang", "Yang");
+        assertThat(foundAuthors, hasSize(0));
     }
 
     @Test

@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface BookRepository extends CrudRepository<Book, Integer> {
-    @Query("Select b from Book b Join Fetch b.authors a where b.title=:bookTitle")
+    @Query("Select Distinct b from Book b Join Fetch b.authors a where b.title=:bookTitle")
     List<Book> findBookAuthor(@Param("bookTitle") String bookTitle);
 }

@@ -43,17 +43,27 @@ class BookRepositoryTest {
     @Test
     void testFindAllBook() {
         Collection<Book> books = (Collection<Book>) bookRepository.findAll();
-        assertThat(books, hasSize(6));
+        assertThat(books, hasSize(7));
     }
 
     @Test
     void givenBookTitle_FindBookAndItsAuthors() {
-        String bookName = "The Tragical History of Hamlet";
-        List<Book> found = bookRepository.findBookAuthor(bookName);
+        String title = "The Tragical History of Hamlet";
+        List<Book> found = bookRepository.findBookAuthor(title);
 
         assertAll("find found and its author: ",
                 () -> assertThat(found, hasSize(1)),
                 () -> assertThat(found.get(0).getAuthors(), hasSize(1))
+        );
+    }
+
+    @Test
+    void givenBookHavingMultipleAuthor_FindBookAuthorsByBookTitle() {
+        String title = "Random Signals Detection,Estimation, and Data Analysis";
+        List<Book> found = bookRepository.findBookAuthor(title);
+        assertAll("find found and its author: ",
+                () -> assertThat(found, hasSize(1)),
+                () -> assertThat(found.get(0).getAuthors(), hasSize(2))
         );
     }
 

@@ -20,7 +20,7 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer authorId;
 
-    @Column(nullable = false, length = 128, unique = true)
+    @Column(nullable = false, length = 128)
     @NotNull
     private String firstName;
 
@@ -30,10 +30,6 @@ public class Author {
 
     @ManyToMany(mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = Book.class)
     private Set<Book> books = new HashSet<>();
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof Author;
-    }
 
     public Author() {
     }
