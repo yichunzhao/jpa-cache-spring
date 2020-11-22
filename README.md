@@ -17,6 +17,9 @@ The purpose of 2nd level cache is to store the often-visited data in the memory 
 
 * Don't use CascadeTye Remove and ALL. It may remove the whole of database. 
 
+### Spring Data JPA: Query Projections
+
+
 ### Difference between Join and Join Fetch
 
 Join and Join Fetch looks like very similar, but the generated SQL is quite different; Join-Fetch generates less SQL queries. 
