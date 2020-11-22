@@ -17,6 +17,14 @@ The purpose of 2nd level cache is to store the often-visited data in the memory 
 
 * Don't use CascadeTye Remove and ALL. It may remove the whole of database. 
 
+### Spring Data JPA: Query Projections
+
+Instead of returning all the properties of the returned objects; it may desirable to retrieve data as objects of customized types, which contains only properties that we care about. The persistence provider generates Insert, Update, and Delete based on the entity lifecycle state transitions.  
+
+Read operation may select DTO projection
+
+Entity project is the most commonly used projection, but it is often not the best approach. If you need to optimise persistence layer performance, you should only use entity projections for write operations. 
+
 ### Difference between Join and Join Fetch
 
 Join and Join Fetch looks like very similar, but the generated SQL is quite different; Join-Fetch generates less SQL queries. 
