@@ -2,7 +2,6 @@ package com.ynz.jpa.cache.service;
 
 import com.ynz.jpa.cache.entities.Author;
 import com.ynz.jpa.cache.entities.Book;
-import com.ynz.jpa.cache.exception.DuplicatedElementException;
 import com.ynz.jpa.cache.exception.NotFoundException;
 import com.ynz.jpa.cache.repository.AuthorRepository;
 import com.ynz.jpa.cache.repository.BookRepository;
@@ -86,7 +85,7 @@ class AuthorBookServiceTest {
         book3.setTitle("my book3");
         saved.addBook(book3);
 
-        Author updated = authorBookService.updateAuthor(saved);
+        Author updated = authorBookService.updateAuthor(saved.getAuthorId(), saved);
         assertAll(
                 () -> assertEquals(updated, saved),
                 () -> assertThat(updated.getFirstName(), is("Mikey")),
@@ -124,18 +123,26 @@ class AuthorBookServiceTest {
     }
 
     @Test
-    void whenCreateAuthorExistedAlready_ThenItThrowsDuplicatedException() {
+    void itAllowsAuthorsHavingSameName() {
         Author author = new Author();
         author.setFirstName("William");
         author.setLastName("Shakespeare");
 
-        assertThrows(DuplicatedElementException.class, () -> authorBookService.createAuthorBook(author));
+        //this William has one faked book published
+        Book book1 = new Book();
+        book1.setTitle("my book1");
+        author.addBook(book1);
+
+        Author persisted = authorBookService.createAuthorBook(author);
+        assertNotNull(persisted);
+
+        List<Author> anotherShakespeare = authorRepository.findAuthorBooksByFullName("William", "Shakespeare");
+        assertThat(anotherShakespeare, hasSize(2));
     }
 
     @Test
     void findAuthorByName() {
-        Author found = authorBookService.findAuthorByName("William", "Shakespeare");
-        assertThat(found, is(notNullValue()));
+        assertThat(authorBookService.findAuthorByName("William", "Shakespeare"), hasSize(1));
     }
 
     @Test

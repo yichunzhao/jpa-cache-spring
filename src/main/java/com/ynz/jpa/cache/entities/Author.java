@@ -51,6 +51,10 @@ public class Author {
         return books;
     }
 
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

@@ -32,14 +32,16 @@ public class AuthorBookService {
     /**
      * Update an-existed author and its books
      *
-     * @param author Author contains Books
+     * @param authorId      target author to be updated
+     * @param updatedAuthor Author contains Books
      * @return Author updated Author
      */
-    public Author updateAuthor(Author author) {
-        Author found = authorRepository.findById(author.getAuthorId())
+    public Author updateAuthor(Integer authorId, Author updatedAuthor) {
+        Author found = authorRepository.findById(authorId)
                 .orElseThrow(() -> new NotFoundException("Author is not existed!"));
+        updatedAuthor.setAuthorId(found.getAuthorId());
 
-        return authorRepository.save(author);
+        return authorRepository.save(updatedAuthor);
     }
 
     /**
@@ -61,9 +63,8 @@ public class AuthorBookService {
 
     }
 
-    public Author findAuthorByName(String firstName, String lastName) {
-        Author found = authorRepository.findAuthorBooksByName(firstName, lastName);
-        return found;
+    public List<Author> findAuthorByName(String firstName, String lastName) {
+        return authorRepository.findAuthorBooksByFullName(firstName, lastName);
     }
 
     public Author findAuthorById(Integer authorId) {
@@ -75,16 +76,6 @@ public class AuthorBookService {
         List<Book> found = bookRepository.findBookAuthor(title);
         if (found.isEmpty()) throw new NotFoundException("book is not found");
         return found;
-    }
-
-    public Book updateBook(Book updatedBook) {
-        findBookAuthorByTitle(updatedBook.getTitle());
-        return bookRepository.save(updatedBook);
-    }
-
-    public void deleteBook(Book book) {
-        findBookAuthorByTitle(book.getTitle());
-        bookRepository.deleteById(book.getBookId());
     }
 
 

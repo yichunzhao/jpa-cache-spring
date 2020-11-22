@@ -24,8 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @DataJpaTest
-public
-class AuthorRepositoryTest {
+public class AuthorRepositoryTest {
 
     @Autowired
     private AuthorRepository authorRepository;
@@ -44,7 +43,7 @@ class AuthorRepositoryTest {
 
     @Test
     void whenFindAuthorBooksByAuthorIdNotExisted_ReturnNull() {
-        assertThat(authorRepository.findAuthorBooksById(10), is(nullValue()));
+        assertThat(authorRepository.findAuthorBooksById(10).isPresent(), is(false));
     }
 
     @Test
