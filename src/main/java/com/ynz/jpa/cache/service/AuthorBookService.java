@@ -2,6 +2,7 @@ package com.ynz.jpa.cache.service;
 
 import com.ynz.jpa.cache.entities.Author;
 import com.ynz.jpa.cache.entities.Book;
+import com.ynz.jpa.cache.exception.AuthorHasNoBookException;
 import com.ynz.jpa.cache.exception.NotFoundException;
 import com.ynz.jpa.cache.repository.AuthorRepository;
 import com.ynz.jpa.cache.repository.BookRepository;
@@ -26,6 +27,7 @@ public class AuthorBookService {
      * @return Author
      */
     public Author createAuthorBook(Author author) {
+        if (author.getBooks().isEmpty()) throw new AuthorHasNoBookException("Author should have a published book");
         return authorRepository.save(author);
     }
 
