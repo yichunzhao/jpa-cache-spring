@@ -1,19 +1,28 @@
 package com.ynz.jpa.cache.dto;
 
-import com.ynz.jpa.cache.entities.Book;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
 public class AuthorDto {
-    @NotNull
+    @NotBlank(message = "Author must have a firstname")
     private String firstName;
 
-    @NotNull
+    @NotBlank(message = "Author must have a lastname")
     private String lastName;
 
-    private Set<Book> books = new HashSet<>();
+    private Set<BookDto> books = new HashSet<>();
+
+    public void addBook(BookDto book) {
+        books.add(book);
+        book.getAuthors().add(this);
+    }
+
+    public void removeBook(BookDto book) {
+        books.remove(book);
+        book.getAuthors().remove(this);
+    }
 }

@@ -4,6 +4,7 @@ import com.ynz.jpa.cache.entities.Author;
 import com.ynz.jpa.cache.entities.Book;
 import com.ynz.jpa.cache.exception.DuplicatedElementException;
 import com.ynz.jpa.cache.exception.NotFoundException;
+import com.ynz.jpa.cache.repository.AuthorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +17,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -24,18 +27,64 @@ class AuthorBookServiceTest {
     @Autowired
     private AuthorBookService authorBookService;
 
+    @Autowired
+    private AuthorRepository authorRepository;
+
     @Test
-    void createAuthor() {
+    void testCreateAuthorBook() {
         Author author = new Author();
         author.setFirstName("Mike");
         author.setLastName("Zhao");
 
-        Author created = authorBookService.createAuthor(author);
+        Book book1 = new Book();
+        book1.setTitle("my book1");
+
+        Book book2 = new Book();
+        book2.setTitle("my book2");
+
+        //link author and books.
+        author.addBook(book1);
+        author.addBook(book2);
+
+        Author created = authorBookService.createAuthorBook(author);
 
         assertAll(
                 () -> assertThat(created, is(notNullValue())),
                 () -> assertThat(created.getFirstName(), is("Mike")),
-                () -> assertThat(created.getLastName(), is("Zhao"))
+                () -> assertThat(created.getLastName(), is("Zhao")),
+                () -> assertThat(created.getBooks(), hasSize(2))
+        );
+    }
+
+    @Test
+    void testUpdateExistingAuthorBook() {
+        Author author = new Author();
+        author.setFirstName("Mike");
+        author.setLastName("Zhao");
+
+        Book book1 = new Book();
+        book1.setTitle("my book1");
+
+        Book book2 = new Book();
+        book2.setTitle("my book2");
+
+        //link author and books.
+        author.addBook(book1);
+        author.addBook(book2);
+
+        Author saved = authorRepository.save(author);
+        assertNotNull(saved);
+
+        saved.setFirstName("Mikey");
+        Book book3 = new Book();
+        book3.setTitle("my book3");
+        saved.addBook(book3);
+
+        Author updated = authorBookService.updateAuthor(saved);
+        assertAll(
+                () -> assertEquals(updated, saved),
+                () -> assertThat(updated.getFirstName(), is("Mikey")),
+                () -> assertThat(updated.getBooks(), hasSize(3))
         );
     }
 
@@ -45,15 +94,7 @@ class AuthorBookServiceTest {
         author.setFirstName("William");
         author.setLastName("Shakespeare");
 
-        assertThrows(DuplicatedElementException.class, () -> authorBookService.createAuthor(author));
-    }
-
-    @Test
-    void whenDeleteAuthorNotExisted_ThrowNotFoundException() {
-        Author author = new Author();
-        author.setFirstName("Mike");
-        author.setLastName("Zhao");
-        assertThrows(NotFoundException.class, () -> authorBookService.deleteAuthor(author));
+        assertThrows(DuplicatedElementException.class, () -> authorBookService.createAuthorBook(author));
     }
 
     @Test
@@ -76,9 +117,6 @@ class AuthorBookServiceTest {
         assertThrows(NotFoundException.class, () -> authorBookService.findBookAuthorByTitle("unknown book"));
     }
 
-    @Test
-    void updateBook() {
-    }
 
     @Test
     void deleteBook() {

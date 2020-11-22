@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,11 +22,11 @@ public class Author {
     private Integer authorId;
 
     @Column(nullable = false, length = 128)
-    @NotNull
+    @NotBlank(message = "Author must have a firstname.")
     private String firstName;
 
     @Column(nullable = false, length = 128)
-    @NotNull
+    @NotNull(message = "Author must have a lastname")
     private String lastName;
 
     @ManyToMany(mappedBy = "authors", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = Book.class)
@@ -74,5 +75,10 @@ public class Author {
     @Override
     public int hashCode() {
         return 47;
+    }
+
+    public void addBook(Book book) {
+        this.books.add(book);
+        book.getAuthors().add(this);
     }
 }

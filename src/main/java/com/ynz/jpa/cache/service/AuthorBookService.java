@@ -2,7 +2,6 @@ package com.ynz.jpa.cache.service;
 
 import com.ynz.jpa.cache.entities.Author;
 import com.ynz.jpa.cache.entities.Book;
-import com.ynz.jpa.cache.exception.DuplicatedElementException;
 import com.ynz.jpa.cache.exception.NotFoundException;
 import com.ynz.jpa.cache.repository.AuthorRepository;
 import com.ynz.jpa.cache.repository.BookRepository;
@@ -18,15 +17,26 @@ public class AuthorBookService {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
 
-    public Author createAuthor(Author author) {
-        Author found = findAuthorByName(author.getFirstName(), author.getLastName());
-        if (found != null) throw new DuplicatedElementException("Author is already existed!");
+    /**
+     * Create an non-existed author and link to his/her books.
+     *
+     * @param author Author contains Books
+     * @return Author
+     */
+    public Author createAuthorBook(Author author) {
         return authorRepository.save(author);
     }
 
+    /**
+     * Update an-existed author and its books
+     *
+     * @param author Author contains Books
+     * @return Author updated Author
+     */
     public Author updateAuthor(Author author) {
-        Author found = findAuthorByName(author.getFirstName(), author.getLastName());
-        if (found != null) throw new NotFoundException("Author is not existed!");
+        Author found = authorRepository.findById(author.getAuthorId())
+                .orElseThrow(() -> new NotFoundException("Author is not existed!"));
+
         return authorRepository.save(author);
     }
 
