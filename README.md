@@ -13,23 +13,38 @@ The purpose of 2nd level cache is to store the often-visited data in the memory 
 
 * Always use FetchType.Lazy: always using lazy fetching to reduce N+1 problem. Instead, using join queries.  
 
-*  Query-specific fetching: using joint-fetch; named entity graph;  joint-fetch cross(JOIN FETCH) is almost identical to a simple join clause in a JPQL query. Altough they look similar but Joint-fectch has much impact on the generated SQL query. 
+* Query-specific fetching: using joint-fetch; named entity graph;  joint-fetch cross(JOIN FETCH) is almost identical to a simple join clause in a JPQL query. Altough they look similar but Joint-fectch has much impact on the generated SQL query. 
 
 * Don't use CascadeTye Remove and ALL. It may remove the whole of database. 
 
 ### Spring Data JPA: Query Projections
 
-Instead of returning all the properties of the returned objects; it may desirable to retrieve data as objects of customized types, which contains only properties that we care about. The persistence provider generates Insert, Update, and Delete based on the entity lifecycle state transitions.  
+Instead of returning all the properties of the returned objects; Spring data allows modeling dedicated return types, to retrieve a partial view of the managed aggregates; it  contains only properties that we care about. 
 
-Read operation may select DTO projection
+Entity projection is the most commonly used, but it is often not the best approach. If you need to optimise persistence layer performance, you should only use entity projections for write operations, and leaving the persistence provider to generates Insert, Update, and Delete based on the entity lifecycle state transitions.  
 
-Entity project is the most commonly used projection, but it is often not the best approach. If you need to optimise persistence layer performance, you should only use entity projections for write operations. 
+For Read operations, three projection types. 
+* Interface projection: 
+  * Closed projection: Spring-data creates a projection proxy wrapping around the entity for us; we may use it in a repository interface. the projection interface is used as the element type in the returned collection; the interface method exaclty matching the Entity property name.  
+  * Open Projections: Accessor methods in projection interfaces can also be used to compute new values by using the @Value annotation; meaning that, fetching desired field values
+ from the target, and recalculate them to reform a new value; using annotation @Value 
+ 
+   ````
+   interface NamesOnly {
+
+    @Value("#{target.firstname + ' ' + target.lastname}")
+    String getFullName();
+    }
+    ````
+* Class-base projection: we create our own projection class, fx: DTO projection.
+  * Using DTO to hold a partial view of the traget Entity class; it doesn't cause proxy generated 
+  * Dynamic projections: using java generic type within the reposistory method, to project to multiple class types.
 
 ### Difference between Join and Join Fetch
 
 Join and Join Fetch looks like very similar, but the generated SQL is quite different; Join-Fetch generates less SQL queries. 
 
-When using Join, It generates two SQL queries; It causes 3 table joins totally.   
+When using Join, It generates two SQL queries and 3 table joins.   
 
 `@Query("Select a from Author a Join a.books b where a.authorId = :authorId")`
 
