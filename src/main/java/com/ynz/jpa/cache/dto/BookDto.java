@@ -1,14 +1,15 @@
 package com.ynz.jpa.cache.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
+@Builder
 public class BookDto {
-    @NotBlank(message="Book must have a title")
+    private Integer bookId;
+
+    @NotBlank(message = "Book must have a title")
     private String title;
-    private Set<AuthorDto> authors = new HashSet<>();
 }

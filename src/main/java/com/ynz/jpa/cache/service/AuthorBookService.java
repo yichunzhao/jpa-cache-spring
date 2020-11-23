@@ -62,7 +62,6 @@ public class AuthorBookService {
             if (book.getAuthors().size() > 1) book.removeAuthor(found);
             if (book.getAuthors().size() == 1) bookRepository.deleteById(book.getBookId());
         }
-
     }
 
     public List<Author> findAuthorByName(String firstName, String lastName) {
@@ -71,14 +70,13 @@ public class AuthorBookService {
 
     public Author findAuthorById(Integer authorId) {
         return authorRepository.findAuthorBooksById(authorId)
-                .orElseThrow(() -> new NotFoundException("Author is not existed!"));
+                .orElseThrow(() -> new NotFoundException("Author Id: " + authorId + " Author is not existed!"));
     }
 
     public List<Book> findBookAuthorByTitle(String title) {
         List<Book> found = bookRepository.findBookAuthor(title);
-        if (found.isEmpty()) throw new NotFoundException("Book is not found");
+        if (found.isEmpty()) throw new NotFoundException("Book title:" + title + " is not found");
         return found;
     }
-
 
 }

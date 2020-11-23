@@ -54,6 +54,10 @@ public class Book {
         return title;
     }
 
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
+    }
+
     public Set<Author> getAuthors() {
         return authors;
     }
