@@ -13,8 +13,6 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -48,10 +46,10 @@ public class AuthorRepositoryTest {
 
     @Test
     void testFindAuthorBookByAuthorName() {
-        Author author = authorRepository.findAuthorBooksByName("William", "Shakespeare");
+        List<Author> authors = authorRepository.findAuthorBooksByFullName("William", "Shakespeare");
         assertAll("find Author and Books",
-                () -> assertThat(author, is(notNullValue())),
-                () -> assertThat(author.getBooks(), hasSize(3))
+                () -> assertThat(authors, hasSize(1)),
+                () -> assertThat(authors.get(0).getBooks(), hasSize(3))
         );
     }
 
@@ -80,9 +78,8 @@ public class AuthorRepositoryTest {
     }
 
     @Test
-    void whenFindAuthorBookWhoIsNotExisted_ReturnNull() {
-        Author author = authorRepository.findAuthorBooksByName("Kang", "Yang");
-        assertThat(author, is(nullValue()));
+    void whenFindAuthorBookByFullNameWhoIsNotExisted_ReturnEmptyList() {
+        assertThat(authorRepository.findAuthorBooksByFullName("Kang", "Yang"), hasSize(0));
     }
 
     @Test

@@ -14,10 +14,6 @@ public interface AuthorRepository extends CrudRepository<Author, Integer> {
     @Query("Select a from Author a Join Fetch a.books b where a.authorId = :authorId")
     Optional<Author> findAuthorBooksById(@Param("authorId") Integer authorId);
 
-    @Query("Select a from Author a Join Fetch a.books b where a.firstName = :firstName And a.lastName = :lastName")
-    Author findAuthorBooksByName(@Param("firstName") String firstName, @Param("lastName") String lastName);
-
     @Query("Select DISTINCT  a from Author a Join Fetch a.books b where a.firstName = :firstName And a.lastName = :lastName")
     List<Author> findAuthorBooksByFullName(@Param("firstName") String firstName, @Param("lastName") String lastName);
-
 }

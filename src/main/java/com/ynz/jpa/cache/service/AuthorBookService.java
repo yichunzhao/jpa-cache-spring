@@ -76,7 +76,7 @@ public class AuthorBookService {
 
     public List<Book> findBookAuthorByTitle(String title) {
         List<Book> found = bookRepository.findBookAuthor(title);
-        if (found.isEmpty()) throw new NotFoundException("book is not found");
+        if (found.isEmpty()) throw new NotFoundException("Book is not found");
         return found;
     }
 
