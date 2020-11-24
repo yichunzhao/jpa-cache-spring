@@ -2,7 +2,7 @@ package com.ynz.jpa.cache.service;
 
 import com.ynz.jpa.cache.entities.Author;
 import com.ynz.jpa.cache.entities.Book;
-import com.ynz.jpa.cache.exception.NotFoundException;
+import com.ynz.jpa.cache.exception.ResourceNotFoundException;
 import com.ynz.jpa.cache.repository.AuthorRepository;
 import com.ynz.jpa.cache.repository.BookRepository;
 import org.junit.jupiter.api.Test;
@@ -156,7 +156,7 @@ class AuthorBookServiceTest {
 
     @Test
     void whenFindBookByTitleNotExisted_ThrowNotFoundException() {
-        assertThrows(NotFoundException.class, () -> authorBookService.findBookAuthorByTitle("unknown book"));
+        assertThrows(ResourceNotFoundException.class, () -> authorBookService.findBookAuthorByTitle("unknown book"));
     }
 
 

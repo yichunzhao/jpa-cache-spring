@@ -3,7 +3,7 @@ package com.ynz.jpa.cache.service;
 import com.ynz.jpa.cache.entities.Author;
 import com.ynz.jpa.cache.entities.Book;
 import com.ynz.jpa.cache.exception.AuthorHasNoBookException;
-import com.ynz.jpa.cache.exception.NotFoundException;
+import com.ynz.jpa.cache.exception.ResourceNotFoundException;
 import com.ynz.jpa.cache.repository.AuthorRepository;
 import com.ynz.jpa.cache.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class AuthorBookService {
      */
     public Author updateAuthor(Integer authorId, Author updatedAuthor) {
         Author found = authorRepository.findById(authorId)
-                .orElseThrow(() -> new NotFoundException("Author is not existed!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Author is not existed!"));
         updatedAuthor.setAuthorId(found.getAuthorId());
 
         return authorRepository.save(updatedAuthor);
@@ -70,12 +70,12 @@ public class AuthorBookService {
 
     public Author findAuthorById(Integer authorId) {
         return authorRepository.findAuthorBooksById(authorId)
-                .orElseThrow(() -> new NotFoundException("Author Id: " + authorId + " Author is not existed!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Author Id: " + authorId + " is not existed!"));
     }
 
     public List<Book> findBookAuthorByTitle(String title) {
         List<Book> found = bookRepository.findBookAuthor(title);
-        if (found.isEmpty()) throw new NotFoundException("Book title:" + title + " is not found");
+        if (found.isEmpty()) throw new ResourceNotFoundException("Book title:" + title + " is not found");
         return found;
     }
 
