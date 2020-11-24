@@ -79,4 +79,8 @@ public class AuthorBookService {
         return found;
     }
 
+    public Book findBookAuthorByBookId(Integer bookId) {
+        return bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book id:" + bookId + " is not found"));
+    }
+
 }
