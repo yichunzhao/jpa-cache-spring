@@ -19,13 +19,13 @@ The purpose of 2nd level cache is to store the often-visited data in the memory 
 
 ### Spring Data JPA: Query Projections
 
-Instead of returning all the properties of the returned objects; Spring data allows modeling dedicated return types, to retrieve a partial view of the managed aggregates; it  contains only properties that we care about. 
+Instead of returning all the properties of the returned objects constained in an aggregate root; Spring data allows modeling dedicated return types, to retrieve a partial view of the managed aggregates; it  contains only properties that we care about. 
 
-Entity projection is the most commonly used, but it is often not the best approach. If you need to optimise persistence layer performance, you should only use entity projections for write operations, and leaving the persistence provider to generates Insert, Update, and Delete based on the entity lifecycle state transitions.  
+Entity projection is the most commonly used, but it is often not the best approach. If you need to optimise persistence layer performance, you should only use entity projections for write operations, for you have to rely on the persistence provider to generates Insert, Update, and Delete based on the entity lifecycle state transitions.  
 
 For Read operations, three projection types. 
 * Interface projection: 
-  * Closed projection: Spring-data creates a projection proxy wrapping around the entity for us; we may use it in a repository interface. the projection interface is used as the element type in the returned collection; the interface method exaclty matching the Entity property name.  
+  * Closed projection: Spring-data creates a projection proxy wrapping around the entity for us; we may use a projection interface in a repository interface as element type in the returned collection; the interface method exaclty matching the Entity property name; and the interface can be nested with aggregate projection interfaces.  
   * Open Projections: Accessor methods in projection interfaces can also be used to compute new values by using the @Value annotation; meaning that, fetching desired field values
  from the target, and recalculate them to reform a new value; using annotation @Value 
  
