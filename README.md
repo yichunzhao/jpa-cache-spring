@@ -19,7 +19,7 @@ The purpose of 2nd level cache is to store the often-visited data in the memory 
 
 ### Spring Data JPA: Query Projections
 
-Instead of returning all the properties of the returned objects constained in an aggregate root; Spring data allows modeling dedicated return types, to retrieve a partial view of the managed aggregates; it  contains only properties that we care about. 
+Instead of returning all the properties of the returned objects constained in an aggregate root; Spring data allows modeling dedicated return types, to retrieve a partial view of the managed aggregates; it contains only properties that we care about. 
 
 Entity projection is the most commonly used, but it is often not the best approach. If you need to optimise persistence layer performance, you should only use entity projections for write operations, for you have to rely on the persistence provider to generates Insert, Update, and Delete based on the entity lifecycle state transitions.  
 
@@ -108,7 +108,7 @@ Hibernate:
 
 ### Issues as using Lombok with Entities
 
-It was not a good experience as using Lombok with Entities, but it is totally fine with DTO. Don't use @Data, @EqualsAndHashCode and @ToString
+It was not a good experience as using Lombok with Entities, but it is totally fine with DTO. Don't use @Data, @EqualsAndHashCode and @ToString with @Entity, for Lombok internal implementation may not satisfy the requirements as an Entity.
 
 #### StackOver flow as using lombok in bi-relationship
 Watching out stackover flow exception as using lombok to create hashcode in a bi-directional relationship; it causes a recursive invoking, and eventually leading to a stack overflow. In the entities, the relationship achors doesn't stand for model physical meanings, they should be excluded. 
