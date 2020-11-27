@@ -22,7 +22,7 @@ public class Book {
     private Integer bookId;
 
     @Column(nullable = false)
-    @NotBlank(message = "Book must hae a title")
+    @NotBlank(message = "Book must have a title")
     private String title;
 
     @ManyToMany(targetEntity = Author.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
