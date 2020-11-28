@@ -8,20 +8,24 @@ import com.ynz.jpa.cache.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Transactional
@@ -94,7 +98,7 @@ class AuthorBookServiceTest {
     }
 
     @Test
-    void givenBooksHasOneAuthor_DeleteAuthorBookIsAlsoRemoved() {
+    void givenBooksHasOneAuthor_DeleteAuthor_BookIsAlsoRemoved() {
         Author author = new Author();
         author.setFirstName("Mike");
         author.setLastName("Zhao");
@@ -119,6 +123,17 @@ class AuthorBookServiceTest {
                 () -> assertFalse(found.isPresent()),
                 () -> saved.getBooks().stream().mapToInt(book -> book.getBookId())
                         .forEach(id -> assertFalse(bookRepository.findById(id).isPresent()))
+        );
+    }
+
+    @Test
+    @Sql("classpath:import_bookAuthors.sql")
+    void givenBookHavingMoreThanOneAuthor_DeleteOneAuthor_TheBookShouldNotBeRemoved() {
+        authorBookService.deleteAuthorById(10);
+        assertAll(
+                () -> assertTrue(bookRepository.findById(10).isPresent()),
+                () -> assertFalse(authorRepository.findById(10).isPresent()),
+                () -> assertThat(bookRepository.findById(10).get().getAuthors(), hasSize(1))
         );
     }
 
@@ -159,5 +174,18 @@ class AuthorBookServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> authorBookService.findBookAuthorByTitle("unknown book"));
     }
 
+    @Test
+    void findAExistingBookByItsId() {
+        Book found = authorBookService.findBookAuthorByBookId(1);
+        assertAll(
+                () -> assertNotNull(found),
+                () -> assertThat(found.getAuthors(), is(not(emptyIterable())))
+        );
+    }
+
+    @Test
+    void whenFindBookNotExistedById_ThenItThrowsNotFoundException() {
+        assertThrows(ResourceNotFoundException.class, () -> authorBookService.findBookAuthorByBookId(100));
+    }
 
 }

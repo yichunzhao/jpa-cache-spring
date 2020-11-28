@@ -60,27 +60,57 @@ public class AuthorBookService {
         //book has >1 author; keep book, but remove this author.
         for (Book book : found.getBooks()) {
             if (book.getAuthors().size() > 1) book.removeAuthor(found);
-            if (book.getAuthors().size() == 1) bookRepository.deleteById(book.getBookId());
+            else {
+                bookRepository.deleteById(book.getBookId());
+            }
         }
     }
 
+    /**
+     * Find authors by firstname and lastname
+     *
+     * @param firstName String
+     * @param lastName  String
+     * @return List<Author>
+     */
     public List<Author> findAuthorByName(String firstName, String lastName) {
         return authorRepository.findAuthorBooksByFullName(firstName, lastName);
     }
 
+    /**
+     * Find author by author id
+     *
+     * @param authorId Integer
+     * @return Author
+     */
     public Author findAuthorById(Integer authorId) {
         return authorRepository.findAuthorBooksById(authorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Author Id: " + authorId + " is not existed!"));
     }
 
+    /**
+     * Find Book and its Authors by a book title; Many books may have the same title.
+     *
+     * @param title String This is the book title that is supposed to be searched.
+     * @return List this returns a list of books that matches the target title.
+     */
     public List<Book> findBookAuthorByTitle(String title) {
         List<Book> found = bookRepository.findBookAuthor(title);
         if (found.isEmpty()) throw new ResourceNotFoundException("Book title:" + title + " is not found");
         return found;
     }
 
+
+    /**
+     * Find Book and its Author(s) referring to a bookId.
+     *
+     * @param bookId Integer this is the book id that is supposed to be searched.
+     * @return Book this returns the book if it is existed; otherwise, it will throws a runtime ResourceNotFoundException.
+     */
     public Book findBookAuthorByBookId(Integer bookId) {
-        return bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book id:" + bookId + " is not found"));
+        return bookRepository.findBookAuthorByBookId(bookId)
+                .orElseThrow(() -> new ResourceNotFoundException("Book id:" + bookId + " is not found"));
     }
+
 
 }
