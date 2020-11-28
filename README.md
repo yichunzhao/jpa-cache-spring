@@ -19,13 +19,13 @@ The purpose of 2nd level cache is to store the often-visited data in the memory 
 
 ### Spring Data JPA: Query Projections
 
-Instead of returning all the properties of the returned objects; Spring data allows modeling dedicated return types, to retrieve a partial view of the managed aggregates; it  contains only properties that we care about. 
+Instead of returning all the properties of the returned objects constained in an aggregate root; Spring data allows modeling dedicated return types, to retrieve a partial view of the managed aggregates; it contains only properties that we care about. 
 
-Entity projection is the most commonly used, but it is often not the best approach. If you need to optimise persistence layer performance, you should only use entity projections for write operations, and leaving the persistence provider to generates Insert, Update, and Delete based on the entity lifecycle state transitions.  
+Entity projection is the most commonly used, but it is often not the best approach. If you need to optimise persistence layer performance, you should only use entity projections for write operations, for you have to rely on the persistence provider to generates Insert, Update, and Delete based on the entity lifecycle state transitions.  
 
 For Read operations, three projection types. 
 * Interface projection: 
-  * Closed projection: Spring-data creates a projection proxy wrapping around the entity for us; we may use it in a repository interface. the projection interface is used as the element type in the returned collection; the interface method exaclty matching the Entity property name.  
+  * Closed projection: Spring-data creates a projection proxy wrapping around the entity for us; we may use a projection interface in a repository interface as element type in the returned collection; the interface method exaclty matching the Entity property name; and the interface can be nested with aggregate projection interfaces.  
   * Open Projections: Accessor methods in projection interfaces can also be used to compute new values by using the @Value annotation; meaning that, fetching desired field values
  from the target, and recalculate them to reform a new value; using annotation @Value 
  
@@ -108,7 +108,7 @@ Hibernate:
 
 ### Issues as using Lombok with Entities
 
-It was not a good experience as using Lombok with Entities, but it is totally fine with DTO. Don't use @Data, @EqualsAndHashCode and @ToString
+It was not a good experience as using Lombok with Entities, but it is totally fine with DTO. Don't use @Data, @EqualsAndHashCode and @ToString with @Entity, for Lombok internal implementation may not satisfy the requirements as an Entity.
 
 #### StackOver flow as using lombok in bi-relationship
 Watching out stackover flow exception as using lombok to create hashcode in a bi-directional relationship; it causes a recursive invoking, and eventually leading to a stack overflow. In the entities, the relationship achors doesn't stand for model physical meanings, they should be excluded. 
@@ -149,3 +149,9 @@ Since Springboot 2.3, bean-validation framework become an independent starter.
     <artifactId>spring-boot-starter-validation</artifactId> 
 </dependency>
 ````
+### Spring Test Annotation @Sql @SqlGroup Loading test specific data
+
+In Spring, it is easy to use DDL(Data definition languagte) to populate test specific schema and/or data for test class or test method; can be applied on the class or method level. 
+
+@SqlGroup allows repeat @Sql
+
