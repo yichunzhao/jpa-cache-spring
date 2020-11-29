@@ -157,9 +157,7 @@ Define multiple @Sql set or using @SqlGroup to repeat @Sql
 
 #### Path-resource Sematics
 
-Each path is interpreted as a Spring resource.  Folders,  resources and test resources are projected to the class path root, which can referred by keyword *classpath:* or *'/'*
-
-"classpath:data.sql" or "/schema.sql".  A plain path, like "xyz-test.sql" is referred to the package path that the class is defined.
+Each path is interpreted as a Spring resource.  Folders,  resources and test resources are projected to the class path root, which can be referred by keyword *classpath:* or *'/'*, fx: "classpath:data.sql" or "/schema.sql". A plain path without keywords, like "xyz-test.sql" is referred to the package path that the class is defined.
 
 
 
