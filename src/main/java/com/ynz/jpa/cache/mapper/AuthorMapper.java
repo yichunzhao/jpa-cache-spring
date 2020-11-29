@@ -14,13 +14,13 @@ import static java.util.stream.Collectors.toList;
 @Data(staticConstructor = "create")
 public class AuthorMapper implements Persistable<AuthorBookDto, Author> {
     @Override
-    public Author convert(AuthorBookDto authorDto) {
+    public Author convert(AuthorBookDto entity) {
         Author author = new Author();
-        author.setAuthorId(authorDto.getAuthorId());
-        author.setFirstName(authorDto.getFirstName());
-        author.setLastName(authorDto.getLastName());
+        author.setAuthorId(entity.getAuthorId());
+        author.setFirstName(entity.getFirstName());
+        author.setLastName(entity.getLastName());
 
-        author.setBooks(authorDto.getBooks().stream().map(dto -> BookMapper.create().convert(dto))
+        author.setBooks(entity.getBooks().stream().map(dto -> BookMapper.create().convert(dto))
                 .collect(toCollection(LinkedHashSet::new)));
         return author;
     }
@@ -35,8 +35,8 @@ public class AuthorMapper implements Persistable<AuthorBookDto, Author> {
     }
 
     @Override
-    public List<Author> convert(Collection<AuthorBookDto> sources) {
-        return sources.stream().map(dto -> convert(dto)).collect(toList());
+    public List<Author> convert(Collection<AuthorBookDto> entities) {
+        return entities.stream().map(dto -> convert(dto)).collect(toList());
     }
 
     @Override

@@ -3,12 +3,12 @@ package com.ynz.jpa.cache.mapper;
 import java.util.Collection;
 import java.util.List;
 
-public interface Persistable<T, R> {
-    R convert(T source);
+public interface Persistable<D, E> {
+    E convert(D dto);
 
-    List<R> convert(Collection<T> sources);
+    List<E> convert(Collection<D> dtos);
 
-    T invert(R entity);
+    D invert(E entity);
 
-    List<T> invert(Collection<R> entities);
+    List<D> invert(Collection<E> entities);
 }
