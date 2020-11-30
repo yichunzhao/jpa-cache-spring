@@ -149,9 +149,17 @@ Since Springboot 2.3, bean-validation framework become an independent starter.
     <artifactId>spring-boot-starter-validation</artifactId> 
 </dependency>
 ````
-### Spring Test Annotation @Sql @SqlGroup Loading test specific data
+### Spring Test Annotation @Sql and @SqlGroup
 
 In Spring, it is easy to use DDL(Data definition languagte) to populate test specific schema and/or data for test class or test method; can be applied on the class or method level. 
 
-@SqlGroup allows repeat @Sql
+Define multiple @Sql set or using @SqlGroup to repeat @Sql
+
+#### Path-resource Sematics
+
+Each path is interpreted as a Spring resource.  Folders,  resources and test resources are projected to the class path root, which can be referred by keyword *classpath:* or *'/'*, fx: "classpath:data.sql" or "/schema.sql". A plain path without keywords, like "xyz-test.sql" is referred to the package path that the class is defined.
+
+
+
+
 
