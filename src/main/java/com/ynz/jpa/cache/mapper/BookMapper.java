@@ -11,11 +11,12 @@ import java.util.stream.Collectors;
 @Data(staticConstructor = "create")
 public class BookMapper implements Persistable<BookDto, Book> {
 
+
     @Override
-    public Book convert(BookDto entity) {
+    public Book convert(BookDto dto) {
         Book book = new Book();
-        book.setBookId(entity.getBookId());
-        book.setTitle(entity.getTitle());
+        book.setBookId(dto.getBookId());
+        book.setTitle(dto.getTitle());
         return book;
     }
 
@@ -25,8 +26,8 @@ public class BookMapper implements Persistable<BookDto, Book> {
     }
 
     @Override
-    public List<Book> convert(Collection<BookDto> entities) {
-        return entities.stream().map(bookDto -> convert(bookDto)).collect(Collectors.toList());
+    public List<Book> convert(Collection<BookDto> dtos) {
+        return dtos.stream().map(bookDto -> convert(bookDto)).collect(Collectors.toList());
     }
 
     @Override
