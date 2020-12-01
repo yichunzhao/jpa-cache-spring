@@ -171,12 +171,32 @@ Github actions is managed by Github, and exceuted in the Github server. Each job
 
 Syntax
 
-> name [optional]
-> on [required]
-> jobs [required] 
->  - one or more jobs
+> name: [name of workflow] optional; normally take the same name as the workflow file name
+
+> on: [event or events] required; events in (Push,Pull request, Release)
+
+> jobs: [required] workflow must have at least one job
+>       job1: 
+>       
+>            name: first job
+>            runs-on: ubuntu-lastest   selecting a runner
+>            steps:
+>             -name: 
+>       
+>       job2 : 
+>       
+>            name: second job
+>            runs-on: windows-latest    selecting a runner
+>            steps:
+>             -name:
+>       
+>
+>  
+>
 >  - Sequence of tasks(steps)
+>
 >    - uses  - select an action
+
 
 
 
