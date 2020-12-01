@@ -188,4 +188,20 @@ class AuthorBookServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> authorBookService.findBookAuthorByBookId(100));
     }
 
+    @Test
+    @Sql("classpath:import_bookAuthors.sql")
+    void givenAuthorAndHisBook_UpdateAuthorInfo() {
+        Author updated = new Author();
+        updated.setFirstName("updatedFirstName");
+
+        Author other = authorBookService.updateAuthor(10, updated);
+
+        assertAll(
+                () -> assertNotNull(other),
+                () -> assertEquals(other.getFirstName(), "updatedFirstName"),
+                () -> assertThat(other.getBooks(), hasSize(1))
+        );
+
+    }
+
 }
