@@ -41,9 +41,14 @@ public class AuthorBookService {
     public Author updateAuthor(Integer authorId, Author updatedAuthor) {
         Author found = authorRepository.findById(authorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Author is not existed!"));
-        updatedAuthor.setAuthorId(found.getAuthorId());
 
-        return authorRepository.save(updatedAuthor);
+        if (updatedAuthor.getFirstName() != null && !updatedAuthor.getFirstName().equals(found.getFirstName()))
+            found.setFirstName(updatedAuthor.getFirstName());
+
+        if (updatedAuthor.getLastName() != null && !updatedAuthor.getLastName().equals(found.getLastName()))
+            found.setLastName(updatedAuthor.getLastName());
+
+        return authorRepository.save(found);
     }
 
     /**
