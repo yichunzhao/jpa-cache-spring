@@ -165,6 +165,18 @@ Github ofers cloud-based CI and CD tools. It is referred Github-actions. It is q
 
 Github actions is a event driven CI and CD tool. A event, push to master or pull request to master, may trigger corresponding Github actions, fx: a pull-request to master may trigger a maven build. Gitbub actions offers many pre-defined actions in the market place, so you may re-used them without rewritting all by yourself. 
 
+Action: https://github.com/marketplace/actions/docker-build-push-action - Docker image build and push
+
+Github actions is managed by Github, and exceuted in the Github server. Each job in a workflow runs in a fresh virtual env. So jobs are executed in parallel by default. So jobs need to be defined 
+
+Syntax
+
+> name [optional]
+> on [required]
+> jobs [required] 
+>  - one or more jobs
+>  - Sequence of tasks(steps)
+>    - uses  - select an action
 
 
 
