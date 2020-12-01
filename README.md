@@ -157,7 +157,13 @@ Define multiple @Sql set or using @SqlGroup to repeat @Sql
 
 #### Path-resource Sematics
 
-Each path is interpreted as a Spring resource.  Folders,  resources and test resources are projected to the class path root, which can be referred by keyword *classpath:* or *'/'*, fx: "classpath:data.sql" or "/schema.sql". A plain path without keywords, like "xyz-test.sql" is referred to the package path that the class is defined.
+Each path is interpreted as a Spring resource.  Resource folders,   resources and test resources are projected to the class path root, which can be referred by keyword *classpath:* or *'/'*, fx: "classpath:data.sql" or "/schema.sql". A plain path without keywords, like "xyz-test.sql" is referred to the package path that the class is defined, so you need to watch out here, when you use a plain path without keywords, then putting your test DDL along with the test classes in the same package. 
+
+### Github actions
+
+Github ofers cloud-based CI and CD tools. It is referred Github-actions. It is quite easy to build with a min efforts. 
+
+Github actions is a event driven CI and CD tool. A event, push to master or pull request to master, may trigger corresponding Github actions, fx: a pull-request to master may trigger a maven build. Gitbub actions offers many pre-defined actions in the market place, so you may re-used them without rewritting all by yourself. 
 
 
 
