@@ -198,6 +198,26 @@ Syntax
 >    - uses  - select an action
 
 
+### @DataJpaTest
+
+The annotation disables full auto-configuration and apllies only configuration relevant to JPA tests(it is a tailored Spring context only for repository layer tests). By default, @DataJPATest use an embedded in-memory database. In the data jpa test context, a TestEntityManager bean is created, and used for test tasks like persist/flush/find. 
+
+JPA @Query and @Query and @Modifying
+
+@Query for read data alone, select data from database.
+
+@Query and @Modifying for Update/Insert/Delete data against database.
+
+Discussion: 
+if @Query queries are involved in persistence context, bean life-cycyle?????
+
+
+
+
+
+
+
+
 
 
 
