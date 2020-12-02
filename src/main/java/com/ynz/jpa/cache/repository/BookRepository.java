@@ -1,6 +1,7 @@
 package com.ynz.jpa.cache.repository;
 
 import com.ynz.jpa.cache.entities.Book;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +17,8 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
 
     @Query("select Distinct b from Book b Join Fetch b.authors a where b.bookId =:bookId")
     Optional<Book> findBookAuthorByBookId(@Param("bookId") Integer bookId);
+
+    @Modifying
+    @Query("update Book b set b.title = :title where b.id=:bookId")
+    int updateBookTitleById(@Param("bookId") Integer bookId, @Param("title") String title);
 }

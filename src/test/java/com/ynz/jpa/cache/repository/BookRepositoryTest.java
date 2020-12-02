@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.jdbc.Sql;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Collection;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -106,5 +108,33 @@ class BookRepositoryTest {
         assertEquals(book, saved);
     }
 
+    @Test
+    @Sql("classpath:import_bookAuthors.sql")
+    void givenBookAuthorExisted_PartiallyUpdateBookTitle() {
+        int targetBookId = 10;
+        String updatedTitle = "JAVA Generics updated";
+
+        //Rows affected
+        int r = bookRepository.updateBookTitleById(targetBookId, updatedTitle);
+
+        //find it back from db after updating operation.
+        Book updated = manager.find(Book.class, targetBookId);
+
+        assertAll(
+                () -> assertNotNull(updated),
+                () -> assertThat(updated.getTitle(), is(updatedTitle)),
+                () -> assertEquals(r, 1)
+        );
+    }
+
+    @Test
+    void givenBookAuthorNotExisted_UpdateReturnRowsAffectedZero() {
+        int targetBookId = 100;
+        String updatedTitle = "JAVA Generics updated";
+
+        //Rows affected: 0
+        int r = bookRepository.updateBookTitleById(targetBookId, updatedTitle);
+        assertThat(r, is(0));
+    }
 
 }
