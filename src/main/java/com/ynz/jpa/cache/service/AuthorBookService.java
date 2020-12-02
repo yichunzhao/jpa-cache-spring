@@ -32,23 +32,46 @@ public class AuthorBookService {
     }
 
     /**
-     * Update an-existed author and its books
+     * Updating an-existed author by author id; An author data model is associated with book models, but here we only
+     * allow to update author alone. The user needs to provide the target author Id, and fill up an Author
+     * template where fields present the expected updated values.
      *
-     * @param authorId      target author to be updated
-     * @param updatedAuthor Author contains Books
-     * @return Author updated Author
+     * @param authorId  Integer; It points to a target author that needs to be updated.
+     * @param newFields Author; It contains fields that are expected to be updated.
+     * @return Author; It returns an updated author.
      */
-    public Author updateAuthor(Integer authorId, Author updatedAuthor) {
-        Author found = authorRepository.findById(authorId)
+    public Author updateAuthor(Integer authorId, Author newFields) {
+        //identifying target in db first.
+        Author existed = authorRepository.findById(authorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Author is not existed!"));
 
-        if (updatedAuthor.getFirstName() != null && !updatedAuthor.getFirstName().equals(found.getFirstName()))
-            found.setFirstName(updatedAuthor.getFirstName());
+        //assigning new values to the existing fields.
+        if (newFields.getFirstName() != null && !newFields.getFirstName().equals(existed.getFirstName()))
+            existed.setFirstName(newFields.getFirstName());
 
-        if (updatedAuthor.getLastName() != null && !updatedAuthor.getLastName().equals(found.getLastName()))
-            found.setLastName(updatedAuthor.getLastName());
+        if (newFields.getLastName() != null && !newFields.getLastName().equals(existed.getLastName()))
+            existed.setLastName(newFields.getLastName());
 
-        return authorRepository.save(found);
+        return authorRepository.save(existed);
+    }
+
+    /**
+     * Updating an existing book partially by looking for a book id.
+     *
+     * @param bookId  Integer. It points the target book.
+     * @param newFields Book. A book template contains newly assigned book field values.
+     * @return Book. It points a newly updated book entity.
+     */
+    public Book updateBook(Integer bookId, Book newFields) {
+        //identifying target in db first.
+        Book existed = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ResourceNotFoundException("Book id:" + bookId + " is not existed!"));
+
+        //partially modifying a book.
+        if (newFields.getTitle() != null && !newFields.getTitle().equals(existed.getTitle()))
+            existed.setTitle(newFields.getTitle());
+
+        return bookRepository.save(existed);
     }
 
     /**

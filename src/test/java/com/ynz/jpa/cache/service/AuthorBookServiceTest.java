@@ -121,7 +121,7 @@ class AuthorBookServiceTest {
         Optional<Author> found = authorRepository.findAuthorBooksById(saved.getAuthorId());
         assertAll(
                 () -> assertFalse(found.isPresent()),
-                () -> saved.getBooks().stream().mapToInt(book -> book.getBookId())
+                () -> saved.getBooks().stream().mapToInt(Book::getBookId)
                         .forEach(id -> assertFalse(bookRepository.findById(id).isPresent()))
         );
     }
@@ -201,7 +201,32 @@ class AuthorBookServiceTest {
                 () -> assertEquals(other.getFirstName(), "updatedFirstName"),
                 () -> assertThat(other.getBooks(), hasSize(1))
         );
-
     }
+
+    void givenAuthorNotExisted_UpdateAuthorCauseException() {
+        Author updated = new Author();
+        assertThrows(ResourceNotFoundException.class, () -> authorBookService.updateAuthor(100, updated));
+    }
+
+    @Test
+    @Sql("classpath:import_bookAuthors.sql")
+    void givenBookAuthor_UpdateBookInfo() {
+        Book newBook = new Book();
+        newBook.setTitle("JAVA Generics-updated");
+        Book updatedBook = authorBookService.updateBook(10, newBook);
+
+        assertAll(
+                () -> assertNotNull(updatedBook),
+                () -> assertThat(updatedBook.getTitle(), is("JAVA Generics-updated")),
+                () -> assertThat(updatedBook.getAuthors(), hasSize(2))
+        );
+    }
+
+    @Test
+    void givenBookNotExisted_UpdateCauseException() {
+        Book newBook = new Book();
+        assertThrows(ResourceNotFoundException.class, () -> authorBookService.updateBook(100, newBook));
+    }
+
 
 }
