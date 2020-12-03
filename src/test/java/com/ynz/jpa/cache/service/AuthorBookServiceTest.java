@@ -203,6 +203,7 @@ class AuthorBookServiceTest {
         );
     }
 
+    @Test
     void givenAuthorNotExisted_UpdateAuthorCauseException() {
         Author updated = new Author();
         assertThrows(ResourceNotFoundException.class, () -> authorBookService.updateAuthor(100, updated));

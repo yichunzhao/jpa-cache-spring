@@ -18,7 +18,7 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
     @Query("select Distinct b from Book b Join Fetch b.authors a where b.bookId =:bookId")
     Optional<Book> findBookAuthorByBookId(@Param("bookId") Integer bookId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Book b set b.title = :title where b.id=:bookId")
     int updateBookTitleById(@Param("bookId") Integer bookId, @Param("title") String title);
 }
