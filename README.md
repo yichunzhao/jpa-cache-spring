@@ -177,11 +177,12 @@ Syntax
 
 > jobs: [required] workflow must have at least one job
 >       job1: 
->       
+>      
 >            name: first job
 >            runs-on: ubuntu-lastest   selecting a runner
 >            steps:
 >             -name: 
+>             - uses  - select an action 
 >       
 >       job2 : 
 >       
@@ -189,27 +190,34 @@ Syntax
 >            runs-on: windows-latest    selecting a runner
 >            steps:
 >             -name:
+>             - uses  - select an action
 >       
->
->  
->
->  - Sequence of tasks(steps)
->
->    - uses  - select an action
 
 
 ### @DataJpaTest
 
 The annotation disables full auto-configuration and apllies only configuration relevant to JPA tests(it is a tailored Spring context only for repository layer tests). By default, @DataJPATest use an embedded in-memory database. In the data jpa test context, a TestEntityManager bean is created, and used for test tasks like persist/flush/find. 
 
-JPA @Query and @Query and @Modifying
+### JPA @Query and @Query and @Modifying
 
-@Query for read data alone, select data from database.
+@Query for reading data alone from database. @Modifying is used to enhance the @Query. @Query and @Modifying together for Update/Insert/Delete and even DDL queries.
 
-@Query and @Modifying for Update/Insert/Delete data against database.
+````
+    @Modifying
+    @Query("update Book b set b.title = :title where b.id=:bookId")
+    int updateBookTitleById(@Param("bookId") Integer bookId, @Param("title") String title);
+````
+
+@Modifying queries return void or the number of updated entities. 
 
 Discussion: 
 if a @Query-query is involved in persistence context, bean life-cycle?????
+
+Using modifying queries leaves the underlying persistence context outdated. The @Modifying @Query queries against the database.  One way to solve this problem is to tell persistence context to clear up and fetch the entites from the database next time. This can be achived by using the clearAutomatically property from the @Modifying annotation `@Modifying(clearAutomatically = true)`. by this way, the persistence context will be cleared automatically after the entity is updated. This may cause Another problem, if the persistence context contains the unflushed changes, then we definitely wish to flush it before clearing the persitence context. This can be setup by another @Modifying property, `@Modifying(flushAutomatically = true)` 
+
+
+
+
 
 
 
