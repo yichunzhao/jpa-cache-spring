@@ -167,7 +167,7 @@ Github actions is a event driven CI and CD tool. A event, push to master or pull
 
 Action: https://github.com/marketplace/actions/docker-build-push-action - Docker image build and push
 
-Github actions is managed by Github, and exceuted in the Github server. Each job in a workflow runs in a fresh virtual env. So jobs are executed in parallel by default. So jobs need to be defined 
+Github actions is managed by Github, and exceuted in the Github server. Each job in a workflow runs in a fresh virtual env. Jobs are executed in parallel by default. So jobs may need to pre-define dependencies. 
 
 Syntax
 
