@@ -209,7 +209,7 @@ JPA @Query and @Query and @Modifying
 @Query and @Modifying for Update/Insert/Delete data against database.
 
 Discussion: 
-if @Query queries are involved in persistence context, bean life-cycyle?????
+if a @Query-query is involved in persistence context, bean life-cycle?????
 
 
 
