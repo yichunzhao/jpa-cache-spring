@@ -44,7 +44,7 @@ For Read operations, three projection types.
 
 Join and Join Fetch looks like very similar, but the generated SQL is quite different; Join-Fetch generates less SQL queries. 
 
-When using Join, It generates two SQL queries and 3 table joins.   
+When using Join, it generates two SQL queries, fetching author first then fetching books; it may cause N+1 problem. 
 
 `@Query("Select a from Author a Join a.books b where a.authorId = :authorId")`
 
