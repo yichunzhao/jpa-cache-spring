@@ -125,7 +125,7 @@ JPA entities maintain several states during their life cycles. Primary key is ob
 
 JavaDoc requirements on the hashCode method: 
 
-> whenever hashcode method is invoked on the same object more than once during an execution of a java application, the hashCode method must consistently return the same integer, > if no information used in equals comparisions on the object is modified. However, this integer need not remain consistent from one execution of an application to another execution of the same application. 
+> whenever hashcode method is invoked on the same object more than once during an execution of a java application, the hashCode method must consistently return the same integer,  if there is no information used in equals comparisions on the object that is modified. However, this integer need not remain consistent from one execution of an application to another execution of the same application. 
 >
 > if two objects are equal according to the their equals methods, then calling the hashCode method on each of the two objects must produce the same integer result.
 >
