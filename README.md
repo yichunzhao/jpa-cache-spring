@@ -111,7 +111,7 @@ Hibernate:
 It was not a good experience as using Lombok with Entities, but it is totally fine with DTO. Don't use @Data, @EqualsAndHashCode and @ToString with @Entity, for Lombok internal implementation may not satisfy the requirements as an Entity.
 
 #### StackOver flow as using lombok in bi-relationship
-Watching out stackover flow exception as using lombok to create hashcode in a bi-directional relationship; it causes a recursive invoking, and eventually leading to a stack overflow. In the entities, the relationship achors doesn't stand for model physical meanings, they should be excluded. 
+Watching out stackover flow exception as using lombok to create hashcode in a bi-directional relationship; it causes a recursive invoking, and eventually leading to a stack overflow. In the entities, the relationship anchors should be excluded. 
 
 #### HashCode
 Primary key is auto-generated as persisting in the database, otherwise it is a null. Hence, caclulating hascode with the primary key doesn't return a fixed value as using the Lombok. Intuitively, we may thhink using primary key to calculate hashcode for an entity, when using an auto-generated strategy, it doesn't fit the requirement about the hashcode in the java doc. So, in another way, we set the hashcode return a fixed number; or we have to figure out a business key or a natural key that may identify an entity/entry uniquely.
