@@ -211,7 +211,7 @@ The annotation disables full auto-configuration and apllies only configuration r
 @Modifying queries return void or the number of updated entities. 
 
 Discussion: 
-if a @Query-query is involved in persistence context, having a entity life-cycle?
+if a @Query-query is involved in persistence context, having an entity life-cycle?
 
 Using modifying queries leaves the underlying persistence context outdated. The @Modifying @Query queries against the database.  One way to solve this problem is to tell persistence context to clear up and fetch the entites from the database next time. This can be achived by using the clearAutomatically property from the @Modifying annotation `@Modifying(clearAutomatically = true)`. by this way, the persistence context will be cleared automatically after the entity is updated. This may cause Another problem, if the persistence context contains the unflushed changes, then we definitely wish to flush it before clearing the persitence context. This can be setup by another @Modifying property, `@Modifying(flushAutomatically = true)` 
 
