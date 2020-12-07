@@ -173,21 +173,21 @@ Syntax
 
 > name: [name of workflow] optional; normally take the same name as the workflow file name
 
-> on: [event or events] required; events in (Push,Pull request, Release)
+> on: [event or events] required; events in (Push,Pull request, Release); 
 
-> jobs: [required] workflow must have at least one job
->       job1: 
->      
+> jobs: [required] {1,*} jobs to reponse the event
 >            name: first job
 >            runs-on: ubuntu-lastest   selecting a runner
 >            steps:
->             -name: 
->             - uses  - select an action 
->       
+              -name: zzz
+              -run: command
+              
+>             -name:  xxx
+>             -uses  - an github action 
+
 >       job2 : 
->       
 >            name: second job
->            runs-on: windows-latest    selecting a runner
+>            runs-on: windows-latest   selecting a runner
 >            steps:
 >             -name:
 >             - uses  - select an action
