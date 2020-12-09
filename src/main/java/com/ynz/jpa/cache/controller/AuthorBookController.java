@@ -18,7 +18,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toCollection;
 
 @RestController
-@RequestMapping("/author")
+@RequestMapping("/api/author")
 @RequiredArgsConstructor
 public class AuthorBookController {
     private final AuthorBookService authorBookService;
