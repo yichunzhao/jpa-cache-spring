@@ -220,12 +220,19 @@ Using modifying queries leaves the underlying persistence context outdated. The 
 
 The purpose of documenting APIs is to help the client developers to use it, and the Swagger is an auto-tool to achieve it.
 
-Swagger offers two format doc, JSON and HTML(UI). 
+Swagger offers two format doc: 
+
+1 JSON : http://localhost:8080/v2/api-docs
+1 HTML(UI):  http://localhost:8080/swagger-ui.html 
 
 Setup steps
 
-* Swagger Depdendencies for Spring, i.e. SwaggerFox.
+* Swagger Depdendencies for Spring, i.e. SwaggerFox. adding two dependencies.
 * Enable Swagger in a Configuration, the best using a saparate configuration.
+* Creating Swagger config bean, i.e. Docket(Swagger doc configurations). 
+* 
+
+Drawback: Swagger may require too many annotation to make code hard to read. It deserves to use Spring REST doc. 
 
 
 
