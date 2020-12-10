@@ -230,7 +230,7 @@ Setup steps
 * Swagger Depdendencies for Spring, i.e. SwaggerFox. adding two dependencies.
 * Enable Swagger in a Configuration, the best using a saparate configuration.
 * Creating Swagger config bean, i.e. Docket(Swagger doc configurations). 
-* 
+* Adding anotations
 
 Drawback: Swagger may require too many annotation to make code hard to read. It deserves to use Spring REST doc. 
 
