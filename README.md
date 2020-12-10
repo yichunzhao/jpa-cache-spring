@@ -211,12 +211,21 @@ The annotation disables full auto-configuration and apllies only configuration r
 @Modifying queries return void or the number of updated entities. 
 
 Discussion: 
-if a @Query-query is involved in persistence context, having an entity life-cycle?
+Is a @Query-query involved in persistence context, having an entity life-cycle?
 
 Using modifying queries leaves the underlying persistence context outdated. The @Modifying and @Query queries against the database, meaning that, a @Modifying query changes the entry or entries, but the current persistence context doesn't know it. One way to solve this problem is to tell persistence context to clear up and fetch the entities from the database next time. This can be achieved by using the clearAutomatically property from the @Modifying annotation, i.e. `@Modifying(clearAutomatically = true)`. By this way, the persistence context will be cleared automatically after the entity is updated. This may cause another problem, if the persistence context contains the unflushed changes, then we definitely wish to flush them to the database before the clearing operation. This can be setup by another @Modifying property, i.e. `@Modifying(flushAutomatically = true)` 
 
 
+### Swagger API Doc
 
+The purpose of documenting APIs is to help the client developers to use it, and the Swagger is an auto-tool to achieve it.
+
+Swagger offers two format doc, JSON and HTML(UI). 
+
+Setup steps
+
+* Swagger Depdendencies for Spring, i.e. SwaggerFox.
+* Enable Swagger in a Configuration, the best using a saparate configuration.
 
 
 
