@@ -5,6 +5,15 @@ Setup the 2nd level JPA cache with Springboot
 ### 2nd level Cache in JPA
 The purpose of 2nd level cache is to store the often-visited data in the memory staying with the business logic, and therefore reducing the frequency to visit the database via the nextwork. So, the 2nd level cache is applied only with the fetching operations. Normally, we put the caching at the service layer, for we want the business logic directly access data there, instead of going further to visit the persistence layer. 
 
+Spring Boot provides a cache starter, which makes easily include all cache dependencies. 
+
+````
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+````
+
 ### Good practices for Many-to-Many with JPA-Hibernate
 
 * Model associations as a Set; don't use List as modeling many-to-many. On Hibernate removing an element from a List ref. to a many-to-many case, it first remove all records from the associated table, then inserting the remaining ones. It costs much than the spending as using a Set. 
